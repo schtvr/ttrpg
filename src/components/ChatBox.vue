@@ -79,6 +79,7 @@ export default {
 .chat-box {
   margin-top: 1rem;
   padding: 1rem;
+  height: 100%;
   border: 1px solid #ccc;
   border-radius: 8px;
 }

@@ -45,20 +45,6 @@ export default {
   },
 };
 </script>
-<!-- <script>
-export default {
-  data() {
-    return {
-      skills: [
-        { name: 'Agility', attack: '+1', defend: '+2', overcome: '+1', empower: '-1' },
-        { name: 'Brawl', attack: '+4', defend: '+2', overcome: '+0', empower: '-1' },
-        { name: 'Contacts', attack: '-1', defend: '+1', overcome: '+2', empower: '+4' },
-        { name: 'Shoot', attack: '+2', defend: '+1', overcome: '+0', empower: '-1' },
-      ],
-    };
-  },
-};
-</script> -->
 
 <style scoped>
 .skills {

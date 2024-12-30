@@ -77,6 +77,7 @@ export default {
 
 .tabs-section {
   width: 100%;
+  height: 100%;
   max-width: 1200px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -106,6 +107,7 @@ export default {
 
 .tab-content {
   padding: 1rem;
+  height: 100%;
 }
 
 
