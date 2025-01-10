@@ -38,13 +38,7 @@ export default {
   setup() {
     const characterStore = useCharacterStore()
     characterStore.computeModifiers(characterStore)
-
-    // Example of accessing state and actions
-    const addItem = () => {
-      characterStore.addToInventory({ name: 'Health Potion', quantity: 1 })
-    }
-    const tooltipVisible = ref(false)
-
+    let tooltipText
     const showTooltip = (_, skill, action) => {
       tooltipVisible.value = true
       console.log(skill, action)
@@ -53,12 +47,14 @@ export default {
     const hideTooltip = () => {
       tooltipVisible.value = false
     }
+    const tooltipVisible = ref(false)
+
 
     return {
       modifiers: characterStore.modifiers,
       characterName: characterStore.characterName,
       tooltipVisible,
-      addItem,
+      tooltipText,
       showTooltip,
       hideTooltip,
     }
