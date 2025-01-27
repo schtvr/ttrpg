@@ -38,14 +38,15 @@ export default {
     characterStore.computeModifiers(characterStore)
 
     const sendRollResults = (message) => {
-      sendMessage({ sender: "SenderComponent", content: message });
+      sendMessage({ sender: "steve", content: message });
       console.log("sending:", message)
     }
 
-    const roll = (modifier, count) => {
+    const roll = (modifier, diceCount) => {
+      // TODO make better for tracking roll histories
       let msg = "modifier: " + modifier
       let sum = modifier
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < diceCount; i++) {
         const val = Math.floor(Math.random() * 3) - 1
         msg += `, roll ${i + 1}: ${val}`
         sum += val
