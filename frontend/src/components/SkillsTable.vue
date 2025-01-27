@@ -17,12 +17,10 @@
       <tbody>
         <tr v-for="skill in modifiers" :key="skill.name">
           <td>{{ skill.name }}</td>
-          <td v-for="action in ['attack','defend','overcome','empower']" :key="action">
-            <button class="tooltip-container"
-              @mouseenter="(e) => showTooltip(e, skill, action)"
-              @mouseleave="hideTooltip">
-              {{ skill[action].modifier < 0 ? skill[action].modifier : `+${skill[action].modifier}` }}
-            </button>
+          <td v-for="action in ['attack', 'defend', 'overcome', 'empower']" :key="action">
+            <button class="tooltip-container" @mouseenter="(e) => showTooltip(e, skill, action)"
+              @mouseleave="hideTooltip" @click="roll(skill[action].modifier, 4)">
+              {{ skill[action].modifier < 0 ? skill[action].modifier : `+${skill[action].modifier}` }} </button>
           </td>
         </tr>
       </tbody>
@@ -32,31 +30,34 @@
 
 <script>
 import { useCharacterStore } from '@/stores/characterStore'
-import { ref } from 'vue'
+import { sendMessage } from "@/services/websocketService";
 
 export default {
   setup() {
     const characterStore = useCharacterStore()
     characterStore.computeModifiers(characterStore)
-    let tooltipText
-    const showTooltip = (_, skill, action) => {
-      tooltipVisible.value = true
-      console.log(skill, action)
+
+    const sendRollResults = (message) => {
+      sendMessage({ sender: "SenderComponent", content: message });
+      console.log("sending:", message)
     }
 
-    const hideTooltip = () => {
-      tooltipVisible.value = false
+    const roll = (modifier, count) => {
+      let msg = "modifier: " + modifier
+      let sum = modifier
+      for (let i = 0; i < count; i++) {
+        const val = Math.floor(Math.random() * 3) - 1
+        msg += `, roll ${i + 1}: ${val}`
+        sum += val
+      }
+      msg += `, total roll: ${sum}`
+      sendRollResults(msg)
     }
-    const tooltipVisible = ref(false)
-
 
     return {
       modifiers: characterStore.modifiers,
       characterName: characterStore.characterName,
-      tooltipVisible,
-      tooltipText,
-      showTooltip,
-      hideTooltip,
+      roll
     }
   },
 }
@@ -95,7 +96,8 @@ button:hover {
 
 .tooltip {
   position: absolute;
-  bottom: 88%; /* Position above the container */
+  bottom: 88%;
+  /* Position above the container */
   left: 107%;
   background-color: #333;
   color: white;
