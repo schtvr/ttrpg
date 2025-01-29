@@ -5,6 +5,9 @@
       <div class="sections__character">
         <CharacterInfo />
       </div>
+      <div class="sections__aspects">
+        <AspectsContainer />
+      </div>
       <div class="sections__skills-table">
         <Skills />
       </div>
@@ -29,12 +32,14 @@
 
 <script>
 import CharacterInfo from "../components/CharacterInfo.vue";
+import AspectsContainer from "../components/AspectsContainer.vue"
 import ChatBox from "../components/ChatBox.vue";
 import Skills from "../components/SkillsTable.vue";
 import WikiBox from "../components/WikiBox.vue";
 
 export default {
   components: {
+    AspectsContainer,
     CharacterInfo,
     Skills,
     ChatBox,
@@ -115,16 +120,20 @@ export default {
   grid-area: 1 / 1 / 1 / 3;
 }
 
+.sections__aspects {
+  grid-area: 2 / 1 / 2 / 3;
+}
+
 .sections__specials {
   grid-area: 2 / 1 / 2 / 1;
 }
 
 .sections__skills-table {
-  grid-area: 2 / 1 / 3 / 1;
+  grid-area: 3 / 1 / 3 / 1;
   padding: .5rem;
 }
 
 .sections__omnibox {
-  grid-area: 2 / 2 / 4 / 2;
+  grid-area: 3 / 2 / 3 / 2;
 }
 </style>
