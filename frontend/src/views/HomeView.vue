@@ -18,8 +18,8 @@
           </div>
 
           <div class="tab-content">
-            <ChatBox v-if="activeTab === 'chat'" />
-            <WikiBox v-if="activeTab === 'wiki'" />
+            <ChatBox v-show="activeTab === 'chat'" />
+            <WikiBox v-show="activeTab === 'wiki'" />
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default {
 }
 
 .sections__skills-table {
-  grid-area: 3 / 1 / 3 / 1;
+  grid-area: 2 / 1 / 3 / 1;
   padding: .5rem;
 }
 

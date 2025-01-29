@@ -111,9 +111,9 @@ export const useCharacterStore = defineStore('character', {
       // init modifiers
       const actions = ['attack', 'defend', 'overcome', 'empower']
       for (const skill in skills) {
-        modifiers[skill] = { name: skill, sources: [] }
+        modifiers[skill] = { name: skill }
         actions.forEach((action) => {
-          modifiers[skill][action] = skills[skill]
+          modifiers[skill][action] = { modifier: skills[skill], sources: [] }
         })
       }
 
@@ -123,8 +123,10 @@ export const useCharacterStore = defineStore('character', {
             effect.skills.forEach((skill) => {
               effect.actions.forEach((action) => {
                 if (modifiers[skill] && modifiers[skill][action] !== undefined) {
-                  modifiers[skill].sources.push(item)
-                  modifiers[skill][action] += effect.modifier
+                  // update modifier
+                  modifiers[skill][action].modifer += effect.modifier
+                  // add to sources for tooltips
+                  modifiers[skill][action].sources.push(item)
                 } else {
                   console.warn(`skipped ${skill} ${action} from ${sourceName} ${item.name}`)
                 }
