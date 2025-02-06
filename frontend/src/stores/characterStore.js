@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 export const useCharacterStore = defineStore('character', {
   // State is where you define your data
   state: () => ({
-    name: 'monkey d. luffy',
-    epithet: 'the man who will become king of the pirates',
+    name: 'Monkey D. Luffy',
+    epithet: 'The man who will become king of the pirates',
     skills: {
       agility: 4,
       brawl: 3,
