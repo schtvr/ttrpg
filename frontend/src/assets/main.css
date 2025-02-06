@@ -16,7 +16,7 @@ a,
 }
 
 @font-face {
-  font-family: 'baltro';
+  font-family: 'balatro';
   src: url('/fonts/balatro.otf') format('otf');
   font-weight: normal;
   font-style: normal;
@@ -24,6 +24,9 @@ a,
 body {
   font-family: "balatro", monospace;
   font-style: normal;
+}
+button {
+  font-family: 'balatro';
 }
 
 @media (hover: hover) {

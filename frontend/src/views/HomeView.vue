@@ -69,7 +69,7 @@ export default {
   height: 95vh;
   padding: 1rem;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: 20% 20% 60%;
+  grid-template-rows: 30% 10% 60%;
   grid-column-gap: 12px;
   grid-row-gap: 12px;
 }
