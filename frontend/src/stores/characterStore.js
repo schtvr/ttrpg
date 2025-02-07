@@ -124,7 +124,7 @@ export const useCharacterStore = defineStore('character', {
               effect.actions.forEach((action) => {
                 if (modifiers[skill] && modifiers[skill][action] !== undefined) {
                   // update modifier
-                  modifiers[skill][action].modifer += effect.modifier
+                  modifiers[skill][action].modifier += effect.modifier
                   // add to sources for tooltips
                   modifiers[skill][action].sources.push(item)
                 } else {
