@@ -1,8 +1,6 @@
 <!-- SkillsTable.vue -->
 <template>
   <div class="skills">
-    <div class="tooltip">This is the tooltip text!</div>
-    <div v-if="tooltipVisible" class="tooltip">This is the hidden tooltip text!</div>
     <h2>Skills</h2>
     <table>
       <thead>
@@ -18,24 +16,34 @@
         <tr v-for="skill in modifiers" :key="skill.name">
           <td>{{ skill.name }}</td>
           <td v-for="action in ['attack', 'defend', 'overcome', 'empower']" :key="action">
-            <button class="tooltip-container" @mouseenter="(e) => showTooltip(e, skill, action)"
-              @mouseleave="hideTooltip" @click="roll(skill[action].modifier, 4)">
+            <button @mouseenter="tooltipStore.setTooltip([skill.name, action])" @mouseleave="tooltipStore.clearTooltip"
+              @click="roll(skill[action].modifier, 4)">
               {{ skill[action].modifier < 0 ? skill[action].modifier : `+${skill[action].modifier}` }} </button>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="tooltip-container">
+      <ToolTip />
+    </div>
+
   </div>
 </template>
 
 <script>
 import { useCharacterStore } from '@/stores/characterStore'
+import { useTooltipStore } from "@/stores/tooltipStore";
+import ToolTip from "@/components/ToolTip.vue";
 import { sendMessage } from "@/services/websocketService";
 
 export default {
+  components: { ToolTip },
   setup() {
     const characterStore = useCharacterStore()
     characterStore.computeModifiers(characterStore)
+
+    const tooltipStore = useTooltipStore();
+
 
     const sendRollResults = (message) => {
       sendMessage({ sender: "steve", content: message });
@@ -58,7 +66,8 @@ export default {
     return {
       modifiers: characterStore.modifiers,
       characterName: characterStore.characterName,
-      roll
+      roll,
+      tooltipStore,
     }
   },
 }
@@ -68,6 +77,11 @@ export default {
 .skills {
   margin-top: 1rem;
   position: relative;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
 }
 
 table {
@@ -93,29 +107,5 @@ button {
 
 button:hover {
   background-color: #0056b3;
-}
-
-.tooltip {
-  position: absolute;
-  bottom: 88%;
-  /* Position above the container */
-  left: 107%;
-  background-color: #333;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  white-space: nowrap;
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease;
-}
-
-.tooltip-container:hover .tooltip {
-  opacity: 1;
-  visibility: visible;
 }
 </style>

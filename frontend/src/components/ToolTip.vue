@@ -1,43 +1,42 @@
 <template>
-  <div v-if="tooltipContent" class="tooltip" :style="tooltipStyles">
-    <strong>{{ tooltipContent.title }}</strong>
-    <p>{{ tooltipContent.description }}</p>
+  <div v-if="tooltipContent" class="tooltip">
+    <p>{{ tooltipContent.terms }}</p>
+    <p v-for="d in tooltipContent.descriptions" :key="d">{{ d }}</p>
+    <div v-if="tooltipContent.sources">
+      <p>sources:</p>
+      <p v-for="d in tooltipContent.sources" :key="d">
+        {{ d.effects[0].modifier > -1 ? `+${d.effects[0].modifier}` : d.effects[0].modifier }}: {{ d.name }}
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useTooltipStore } from "@/stores/tooltipStore";
 
 export default {
   setup() {
     const tooltipStore = useTooltipStore();
-    const tooltipX = ref(0);
-    const tooltipY = ref(0);
 
     const tooltipContent = computed(() => tooltipStore.tooltipContent);
 
-    // Compute styles for tooltip positioning
-    const tooltipStyles = computed(() => ({
-      top: `${tooltipY.value}px`,
-      left: `${tooltipX.value}px`
-    }));
-
-    return { tooltipContent, tooltipStyles };
+    return { tooltipContent };
   },
 };
 </script>
 
 <style scoped>
 .tooltip {
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 100%;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 8px;
   border-radius: 5px;
-  font-size: 0.9rem;
-  pointer-events: none;
-  white-space: nowrap;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 </style>
