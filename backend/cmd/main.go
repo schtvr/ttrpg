@@ -5,13 +5,20 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	c "github.com/schtvr/ttrpg/backend/internal/clients"
+	mw "github.com/schtvr/ttrpg/backend/internal/middleware"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
 
 func main() {
 	flag.Parse()
+
+	r := mux.NewRouter()
+	r.HandleFunc("/login", handler)
+	amw := mw.NewauthenticationMiddleware()
+	r.Use(amw.Middleware)
 
 	hub := c.NewHub()
 	go hub.Run()
@@ -23,5 +30,6 @@ func main() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+
 	log.Println("websocket server running at port 8080")
 }
