@@ -10,13 +10,13 @@ import (
 	mw "github.com/schtvr/ttrpg/backend/internal/middleware"
 )
 
-var addr = flag.String("addr", ":8080", "http service address")
+// var addr = flag.String("addr", ":8080", "http service address")
 
 func main() {
 	flag.Parse()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/login", handler)
+	// r.HandleFunc("/login", handlers.)
 	amw := mw.NewauthenticationMiddleware()
 	r.Use(amw.Middleware)
 
