@@ -24,8 +24,12 @@ func main() {
 	http.Handle("/", r)
 
 	ch := h.NewCharacterHandler()
+	r.HandleFunc("/character/generate", ch.GenerateNewCharacter).Methods("GET")
+	r.HandleFunc("/character/new", ch.AddNewCharacter).Methods("POST")
+	r.HandleFunc("/character/{id:[a-zA-Z0-9_-]+}", ch.GetCharacter).Methods("GET")
+
 	r.HandleFunc("/characters", ch.GetCharacters).Methods("GET")
-	r.HandleFunc("/characters/{id:[a-zA-Z0-9_-]+}", ch.GetCharacter).Methods("GET")
+	r.HandleFunc("/characters/{id:[a-zA-Z0-9_-]+}", ch.UpdateCharacter).Methods("PUT")
 
 	http.ListenAndServe(port, r)
 

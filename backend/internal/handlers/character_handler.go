@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"log"
+	"math/rand"
 	"net/http"
 	"strings"
 
@@ -128,6 +129,77 @@ func (h *Handler) AddNewCharacter(w http.ResponseWriter, r *http.Request) {
 	log.Printf("new character added: %+v\n", c)
 }
 
-// CharacterRegistration registers a new character in the database
-// CharacterUpdate updates a character in the database
-// CharacterDelete deletes a character from the database
+// nameGenerator generates a random name for a character
+func nameGenerator() string {
+	prefixes := []string{
+		"Zha", "Lo", "Mei", "Su", "Val", "Dru", "Kei",
+		"Tha", "Vei", "Noa", "Sha", "Rei", "Lum", "Vul",
+		"Tai", "Sel", "Mor", "Kae", "Jhu", "Nai", "Oru",
+	}
+	middles := []string{
+		"ra", "no", "vu", "sha", "len", "tor", "mir",
+		"zin", "vel", "sul", "der", "kai", "mon", "lir",
+		"rum", "tia", "she", "zan", "jun", "lom", "vyn",
+	}
+	suffixes := []string{
+		"el", "in", "or", "eth", "an", "es", "um",
+		"ar", "ien", "oth", "ul", "ix", "esh", "as",
+		"on", "ur", "em", "ae", "yn", "ev", "oth",
+	}
+
+	p := prefixes[rand.Intn(len(prefixes))]
+	m := middles[rand.Intn(len(middles))]
+	s := suffixes[rand.Intn(len(suffixes))]
+
+	return p + m + s
+}
+
+// GenerateNewCharacter generates a character with random data
+func (h *Handler) GenerateNewCharacter(w http.ResponseWriter, r *http.Request) {
+	log.Println("GenerateNewCharacter called")
+
+	// generate a new character with random data
+	c := MiniCharacter{
+		ID:      uuid.New().String(),
+		Name:    nameGenerator(),
+		Creator: "generated",
+	}
+	exampleCharacters = append(exampleCharacters, c)
+	WriteStatusandEncode(w, http.StatusCreated, c)
+	log.Printf("new character generated: %+v\n", c)
+}
+
+func (h *Handler) UpdateCharacter(w http.ResponseWriter, r *http.Request) {
+	log.Println("UpdateCharacter called")
+
+	params := mux.Vars(r)
+	id := params["id"]
+	log.Printf("updating character with id: %s\n", id)
+
+	// decode the request body
+	var c MiniCharacter
+	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+		log.Printf("error decoding character: %v\n", err)
+		http.Error(w, "invalid character data", http.StatusBadRequest)
+		return
+	}
+
+	// validate the character data
+	if c.Name == "" {
+		log.Println("character name is required")
+		http.Error(w, "character name is required", http.StatusBadRequest)
+		return
+	}
+
+	for i, character := range exampleCharacters {
+		if character.ID == id {
+			exampleCharacters[i] = c
+			WriteStatusandEncode(w, http.StatusOK, c)
+			log.Printf("character updated: %+v\n", c)
+			return
+		}
+	}
+
+	log.Printf("character with id %s not found\n", id)
+	http.Error(w, "character not found", http.StatusNotFound)
+}
