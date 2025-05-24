@@ -1,35 +1,34 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	c "github.com/schtvr/ttrpg/backend/internal/clients"
-	mw "github.com/schtvr/ttrpg/backend/internal/middleware"
+
+	h "github.com/schtvr/ttrpg/backend/internal/handlers"
 )
 
-// var addr = flag.String("addr", ":8080", "http service address")
+const port = ":1337"
 
 func main() {
-	flag.Parse()
+
+	// webscoket
+	// hub := c.NewHub()
+	// go hub.Run()
+	// http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	// 	c.ServeWs(hub, w, r)
+	// })
 
 	r := mux.NewRouter()
-	// r.HandleFunc("/login", handlers.)
-	amw := mw.NewauthenticationMiddleware()
-	r.Use(amw.Middleware)
+	http.Handle("/", r)
 
-	hub := c.NewHub()
-	go hub.Run()
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		c.ServeWs(hub, w, r)
-	})
-	log.Println("starting websocket server...")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	ch := h.NewCharacterHandler()
+	r.HandleFunc("GET /characters", ch.GetCharacters)
+	r.HandleFunc("GET /character/{id:[0-9]+}", ch.GetCharacter)
 
-	log.Println("websocket server running at port 8080")
+	http.ListenAndServe(port, r)
+
+	// log.Printf("websocket server running at port %s\n", port)
+	log.Printf("server running at port %s\n", port)
 }
