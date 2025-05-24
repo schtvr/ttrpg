@@ -24,8 +24,8 @@ func main() {
 	http.Handle("/", r)
 
 	ch := h.NewCharacterHandler()
-	r.HandleFunc("GET /characters", ch.GetCharacters)
-	r.HandleFunc("GET /character/{id:[0-9]+}", ch.GetCharacter)
+	r.HandleFunc("/characters", ch.GetCharacters).Methods("GET")
+	r.HandleFunc("/characters/{id:[a-zA-Z0-9_-]+}", ch.GetCharacter).Methods("GET")
 
 	http.ListenAndServe(port, r)
 
